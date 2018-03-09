@@ -76,8 +76,19 @@ verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
             subject = "(Failed to retrieve certificate subject)";
         }
 
-        /* Log and ignore missing CRL errors */
-        if (X509_STORE_CTX_get_error(ctx) == X509_V_ERR_UNABLE_TO_GET_CRL)
+    /* Log and ignore missing CRL errors */
+        
+        /* STEL modification
+         * ignore the not yet valid certificate that seems to be due to the boot of the device (date is not yet ok)
+         *
+         */
+        if (X509_STORE_CTX_get_error(ctx) == X509_V_ERR_CERT_NOT_YET_VALID)
+        {
+            msg(D_TLS_DEBUG_LOW, "WARNING SSL [by STEL]: the certificate is not yet valid, but we ignore this, X509_V_ERR_CERT_NOT_YET_VALID");
+        }
+
+        if((X509_STORE_CTX_get_error(ctx) == X509_V_ERR_CERT_NOT_YET_VALID) ||
+         (X509_STORE_CTX_get_error(ctx) == X509_V_ERR_UNABLE_TO_GET_CRL))
         {
             msg(D_TLS_DEBUG_LOW, "VERIFY WARNING: depth=%d, %s: %s",
                 X509_STORE_CTX_get_error_depth(ctx),
