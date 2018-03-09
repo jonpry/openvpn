@@ -439,8 +439,17 @@ bool
 process_signal(struct context *c)
 {
     bool ret = true;
-
-    if (ignore_restart_signals(c))
+    /** STEL addition
+     * Adrien courdavault 3/9/2018
+     * We want to quit on sighup, and not restart
+     *
+     */
+    
+    if (c->sig->signal_received == SIGHUP)
+    {
+        ret = process_sigterm(c);
+    }
+    else if (ignore_restart_signals(c))
     {
         ret = false;
     }
