@@ -156,11 +156,15 @@ print_signal(const struct signal_info *si, const char *title, int msglevel)
         {
             case SIGINT:
             case SIGTERM:
+            /*STEL
+             * adrien courdavault 3/9/2018
+             * we want sighup to crash*/
+            case SIGHUP:
                 msg(msglevel, "%s[%s,%s] received, %s exiting",
                     signal_name(si->signal_received, true), hs, type, t);
                 break;
 
-            case SIGHUP:
+//            case SIGHUP:
             case SIGUSR1:
                 msg(msglevel, "%s[%s,%s] received, %s restarting",
                     signal_name(si->signal_received, true), hs, type, t);
@@ -439,8 +443,17 @@ bool
 process_signal(struct context *c)
 {
     bool ret = true;
-
-    if (ignore_restart_signals(c))
+    /** STEL addition
+     * Adrien courdavault 3/9/2018
+     * We want to quit on sighup, and not restart
+     *
+     */
+    
+    if (c->sig->signal_received == SIGHUP)
+    {
+        ret = process_sigterm(c);
+    }
+    else if (ignore_restart_signals(c))
     {
         ret = false;
     }
