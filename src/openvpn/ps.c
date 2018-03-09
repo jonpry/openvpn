@@ -131,7 +131,7 @@ set_signals(void)
     signal(SIGTERM, SIG_DFL);
 
     signal(SIGINT, SIG_IGN);
-    signal(SIGHUP, SIG_IGN);
+//    signal(SIGHUP, SIG_IGN);
     signal(SIGUSR1, SIG_IGN);
     signal(SIGUSR2, SIG_IGN);
     signal(SIGPIPE, SIG_IGN);

@@ -247,7 +247,7 @@ pre_init_signal_catch(void)
     signal_mode = SM_PRE_INIT;
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
-    signal(SIGHUP, SIG_IGN);
+//    signal(SIGHUP, SIG_IGN);
     signal(SIGUSR1, SIG_IGN);
     signal(SIGUSR2, SIG_IGN);
     signal(SIGPIPE, SIG_IGN);
@@ -263,7 +263,7 @@ post_init_signal_catch(void)
     signal_mode = SM_POST_INIT;
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
-    signal(SIGHUP, signal_handler);
+    //signal(SIGHUP, signal_handler);
     signal(SIGUSR1, signal_handler);
     signal(SIGUSR2, signal_handler);
     signal(SIGPIPE, SIG_IGN);
